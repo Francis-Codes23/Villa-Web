@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Villa Bravado House Attendance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<nav class="vb-page-nav" aria-label="Page navigation">
+  <a href="index.html">Back to Home</a>
+</nav>
+
+<div class="vb-wrap">
+  <div class="vb-card">
+    <div class="vb-header">
+      <div class="vb-badge">VB</div>
+      <div>
+        <h1>Villa Bravado</h1>
+        <p>Meeting Register</p>
+      </div>
+    </div>
+
+    <form class="vb-form" id="attendanceForm">
+
+      <fieldset class="vb-fieldset">
+        <legend>Cub or Senior</legend>
+        <label class="vb-radio"><input type="radio" name="status" value="Cub" required> <span>Cub</span></label>
+        <label class="vb-radio"><input type="radio" name="status" value="Senior" required> <span>Senior</span></label>
+      </fieldset>
+
+      <label>Full Name</label>
+      <input type="text" name="full_name" required>
+
+      <label>Room</label>
+      <input type="text" name="room_number" required>
+
+      <label>Student Number</label>
+      <input type="text" name="student_number" maxlength="10" minlength="10" required>
+
+      <label>Meeting PIN</label>
+      <input type="password" name="meeting_pin" maxlength="6" required>
+
+      <button type="submit" id="submitBtn" class="vb-button" disabled>
+        <span class="vb-btn-text">Submit Attendance</span>
+      </button>
+
+      <div id="successMsg" class="vb-toast" role="status" aria-live="polite"></div>
+
+    </form>
+  </div>
+</div>
+
+<div class="attendance-success-screen" id="attendanceSuccessScreen" aria-hidden="true">
+  <a class="attendance-continue" id="attendanceContinue" href="index.html">Continue to Site</a>
+  <div class="attendance-poster-frame">
+    <img src="IMG-20260618-WA0007.jpg" alt="Annual Prestige event poster">
+  </div>
+</div>
+
+<!-- Incorrect PIN Popup -->
+<div class="vb-modal" id="pinModal" aria-hidden="true">
+  <div class="vb-modal-card" role="alertdialog" aria-labelledby="pinTitle" aria-describedby="pinDesc">
+    <h3 id="pinTitle">Incorrect PIN</h3>
+    <p id="pinDesc">The Meeting PIN you entered is not correct. Please try again.</p>
+    <button type="button" class="vb-button vb-button--ghost" id="pinModalClose">
+      <span class="vb-btn-text">Close</span>
+    </button>
+  </div>
+</div>
+
+<style>
+:root{
+  --bg:#0a0a0d;
+  --bg-2:#0f0f15;
+  --gold:#d6b25e;
+  --gold-soft:#f0d889;
+  --text:#f2f2f2;
+  --muted:#b6b6b6;
+  --card:#111218;
+  --line:rgba(214,178,94,0.35);
+  --shadow:0 24px 60px rgba(0,0,0,0.55);
+}
+
+*{ box-sizing:border-box; }
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(214,178,94,0.08), transparent 60%),
+    radial-gradient(1200px 600px at 100% 0%, rgba(214,178,94,0.06), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:"Source Sans 3", Arial, sans-serif;
+  padding:24px;
+}
+
+.vb-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.vb-card{
+  width:100%;
+  max-width:720px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)) , var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:28px;
+  box-shadow:var(--shadow);
+  animation:fadeIn 500ms ease;
+}
+
+@keyframes fadeIn{
+  from{ opacity:0; transform:translateY(8px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.vb-card:hover{
+  transform:translateY(-1px);
+  transition:transform 200ms ease;
+}
+
+.vb-card.is-submitting{
+  animation:submitFade 700ms ease;
+  box-shadow:0 24px 80px rgba(214,178,94,0.12), var(--shadow);
+}
+
+@keyframes submitFade{
+  0%{ opacity:1; transform:translateY(0); filter:brightness(1); }
+  40%{ opacity:0.85; transform:translateY(1px); filter:brightness(1.05); }
+  100%{ opacity:1; transform:translateY(0); filter:brightness(1); }
+}
+
+.vb-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.vb-header h1{
+  margin:0;
+  font-family:"Cinzel", serif;
+  font-weight:600;
+  letter-spacing:1px;
+  font-size:26px;
+}
+
+.vb-header p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:14px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.vb-badge{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-family:"Cinzel", serif;
+  font-weight:600;
+  letter-spacing:1px;
+  background:linear-gradient(145deg, #f3d07a, #b58b39);
+  color:#111;
+  box-shadow:0 10px 24px rgba(214,178,94,0.35);
+}
+
+.vb-form{
+  display:grid;
+  gap:12px;
+}
+
+label{
+  font-size:14px;
+  color:var(--gold-soft);
+  margin-top:6px;
+}
+
+input[type="text"],
+input[type="password"]{
+  width:100%;
+  padding:12px 14px;
+  background:var(--bg-2);
+  border:1px solid rgba(255,255,255,0.08);
+  color:var(--text);
+  border-radius:10px;
+  outline:none;
+  transition:border 200ms ease, box-shadow 200ms ease;
+}
+
+input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(214,178,94,0.2);
+}
+
+.vb-fieldset{
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;
+  padding:12px;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.vb-fieldset legend{
+  padding:0 8px;
+  color:var(--gold-soft);
+  font-size:13px;
+  letter-spacing:0.5px;
+}
+
+.vb-radio{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+}
+
+.vb-radio input{
+  accent-color:var(--gold);
+}
+
+.vb-button{
+  margin-top:6px;
+  padding:12px 22px;
+  background:linear-gradient(140deg, #f3d07a, #b58b39);
+  color:#111;
+  font-weight:700;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  letter-spacing:0.6px;
+  text-transform:uppercase;
+  position:relative;
+  overflow:hidden;
+  transition:transform 120ms ease, box-shadow 200ms ease, opacity 200ms ease;
+  box-shadow:0 10px 20px rgba(214,178,94,0.25);
+  width:auto;
+  justify-self:start;
+  align-self:start;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  touch-action:manipulation;
+}
+
+.vb-button::after{
+  content:"";
+  position:absolute;
+  inset:-40% auto auto -60%;
+  width:60%;
+  height:200%;
+  transform:rotate(20deg);
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transition:transform 500ms ease;
+}
+
+.vb-button:hover::after{
+  transform:translateX(220%) rotate(20deg);
+}
+
+.vb-button:hover{ transform:translateY(-1px); }
+.vb-button:active{ transform:translateY(0); }
+
+.vb-button:disabled{
+  opacity:0.55;
+  cursor:not-allowed;
+  box-shadow:none;
+  filter:saturate(0.7);
+}
+
+.vb-button.is-loading{
+  pointer-events:none;
+}
+
+.vb-button--ghost{
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold);
+  box-shadow:none;
+}
+
+/* Centered message */
+.vb-toast{
+  display:none;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  z-index:70;
+  max-width:460px;
+  width:min(92vw, 460px);
+  padding:14px 16px;
+  border-radius:12px;
+  text-align:center;
+  color:#f7e7ba;
+  border:1px solid rgba(214,178,94,0.35);
+  background:rgba(17,18,24,0.95);
+  box-shadow:0 24px 60px rgba(0,0,0,0.55);
+  pointer-events:auto;
+}
+
+.vb-toast--error{
+  color:#ffd6d6;
+  border:1px solid rgba(214,178,94,0.35);
+  background:rgba(30, 15, 15, 0.95);
+}
+
+.vb-toast.show{
+  display:block;
+  animation:fadePop 260ms ease;
+}
+
+
+@keyframes fadePop{
+  from{ opacity:0; transform:translate(-50%, -50%) scale(0.98); }
+  to{ opacity:1; transform:translate(-50%, -50%) scale(1); }
+}
+
+.vb-quote{
+  display:block;
+  margin-top:6px;
+  color:var(--gold-soft);
+  font-style:italic;
+}
+
+.vb-link-btn{
+  display:inline-block;
+  margin-top:10px;
+  padding:8px 16px;
+  border-radius:999px;
+  text-decoration:none;
+  font-weight:700;
+  letter-spacing:0.5px;
+  color:#111;
+  background:linear-gradient(140deg, #f3d07a, #b58b39);
+  box-shadow:0 8px 18px rgba(214,178,94,0.25);
+}
+
+.attendance-success-screen{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:78px 14px 18px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(48, 84, 210, 0.28), transparent 38%),
+    linear-gradient(145deg, #020414 0%, #050924 48%, #020414 100%);
+}
+
+.attendance-success-screen.is-open{
+  display:flex;
+  animation:fadeIn 280ms ease;
+}
+
+.attendance-poster-frame{
+  width:min(100%, 780px);
+  max-height:calc(100vh - 104px);
+  padding:clamp(8px, 2vw, 16px);
+  border:2px solid rgba(216, 184, 83, 0.86);
+  border-radius:22px;
+  background:rgba(2, 4, 20, 0.88);
+  box-shadow:0 28px 80px rgba(0,0,0,0.62), inset 0 0 0 1px rgba(255,255,255,0.12);
+}
+
+.attendance-poster-frame img{
+  display:block;
+  width:100%;
+  height:100%;
+  max-height:calc(100vh - 136px);
+  object-fit:contain;
+  border-radius:14px;
+  background:#020414;
+}
+
+.attendance-continue{
+  position:fixed;
+  top:18px;
+  left:50%;
+  transform:translate(-50%, -16px);
+  z-index:130;
+  min-height:48px;
+  padding:14px 28px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:linear-gradient(135deg, #ff2430, #e50914);
+  color:white;
+  text-decoration:none;
+  text-transform:uppercase;
+  font-weight:800;
+  letter-spacing:0.04em;
+  box-shadow:0 12px 34px rgba(229,9,20,0.48), 0 0 0 2px rgba(255,255,255,0.24);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity 300ms ease, transform 300ms ease, visibility 300ms ease;
+}
+
+.attendance-continue.is-visible{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translate(-50%, 0);
+}
+
+@media (max-width: 520px){
+  .attendance-success-screen{ padding:74px 8px 12px; }
+  .attendance-continue{ width:calc(100% - 28px); }
+  .attendance-poster-frame{ border-radius:16px; }
+  .attendance-poster-frame img{ border-radius:10px; max-height:calc(100vh - 120px); }
+}
+
+/* Modal */
+.vb-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:80;
+}
+
+.vb-modal.is-open{ display:flex; }
+
+.vb-modal-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:20px;
+  max-width:420px;
+  width:100%;
+  box-shadow:var(--shadow);
+}
+
+.vb-modal-card h3{
+  margin:0 0 8px;
+  color:var(--gold-soft);
+}
+
+.vb-modal-card p{
+  margin:0 0 14px;
+  color:var(--text);
+}
+
+/* Responsive */
+@media (max-width: 620px){
+  body{ padding:16px; }
+  .vb-card{ padding:20px; }
+  .vb-header{ flex-direction:column; align-items:flex-start; }
+}
+</style>
+    <link rel="stylesheet" href="villa-theme.css">
+
+<script>
+const button = document.getElementById("submitBtn");
+const successMsg = document.getElementById("successMsg");
+const form = document.getElementById("attendanceForm");
+const card = document.querySelector(".vb-card");
+const btnText = document.querySelector(".vb-btn-text");
+
+const pinModal = document.getElementById("pinModal");
+const pinModalClose = document.getElementById("pinModalClose");
+const attendanceSuccessScreen = document.getElementById("attendanceSuccessScreen");
+const attendanceContinue = document.getElementById("attendanceContinue");
+
+let isSubmitting = false;
+
+function checkForm() {
+  button.disabled = isSubmitting || !form.checkValidity();
+}
+form.addEventListener("input", checkForm);
+form.addEventListener("change", checkForm);
+form.addEventListener("keyup", checkForm);
+form.addEventListener("blur", checkForm, true);
+checkForm();
+
+function triggerSubmitPulse(){
+  card.classList.remove("is-submitting");
+  void card.offsetWidth;
+  card.classList.add("is-submitting");
+}
+
+function setSubmitting(state){
+  isSubmitting = state;
+  if (state) {
+    button.classList.add("is-loading");
+    btnText.textContent = "Submitting...";
+  } else {
+    button.classList.remove("is-loading");
+    btnText.textContent = "Submit Attendance";
+  }
+  checkForm();
+}
+
+function showMessage(type, html){
+  successMsg.classList.remove("show", "vb-toast--error");
+  if (type === "error") successMsg.classList.add("vb-toast--error");
+  successMsg.innerHTML = html;
+  successMsg.classList.add("show");
+}
+
+function showAttendanceSuccess(){
+  successMsg.classList.remove("show", "vb-toast--error");
+  attendanceContinue.classList.remove("is-visible");
+  attendanceSuccessScreen.classList.add("is-open");
+  attendanceSuccessScreen.setAttribute("aria-hidden", "false");
+  setTimeout(() => {
+    attendanceContinue.classList.add("is-visible");
+  }, 3000);
+}
+
+function showPinError(){
+  pinModal.classList.add("is-open");
+  pinModal.setAttribute("aria-hidden", "false");
+}
+
+function hidePinError(){
+  pinModal.classList.remove("is-open");
+  pinModal.setAttribute("aria-hidden", "true");
+}
+
+pinModalClose.addEventListener("click", hidePinError);
+pinModal.addEventListener("click", (e) => {
+  if (e.target === pinModal) hidePinError();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") hidePinError();
+});
+
+const studyMessages = [
+  "Small steps daily become mastery.",
+  "Protect your study time like treasure.",
+  "Consistency beats intensity, every time.",
+  "Show up today, thank yourself tomorrow."
+];
+
+// Supabase (UNCHANGED)
+const supabaseUrl = 'https://hldtrofwejpxixtbrthz.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhsZHRyb2Z3ZWpweGl4dGJydGh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1OTUxMTQsImV4cCI6MjA4OTE3MTExNH0.N5DsYTVezE_DL5fBGdobyIdTlauklJgB7UeTsNybDv8';
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  successMsg.classList.remove('show', 'vb-toast--error');
+
+  triggerSubmitPulse();
+  setSubmitting(true);
+
+  const enteredPin = form.meeting_pin.value.trim();
+
+  try {
+    // GET FIRST ROW PIN
+    const { data, error } = await supabaseClient
+      .from('attendanceMeeting')
+      .select('meeting_pin')
+      .order('id', { ascending: true })
+      .limit(1)
+      .single();
+
+    if (error) throw error;
+
+    const correctPin = data.meeting_pin;
+
+    // CHECK PIN
+    if (enteredPin !== correctPin) {
+      showPinError();
+      setSubmitting(false);
+      return;
+    }
+
+    // INSERT WITHOUT PIN
+    const dataToInsert = {
+      status: form.status.value,
+      full_name: form.full_name.value.trim(),
+      room_number: form.room_number.value.trim(),
+      student_number: form.student_number.value.trim()
+    };
+
+    const { error: insertError } = await supabaseClient
+      .from('attendanceMeeting')
+      .insert([dataToInsert]);
+
+    if (insertError) {
+      const msg = (insertError.message || "").toLowerCase();
+      if (msg.includes("duplicate") || msg.includes("unique")) {
+        showMessage("error",
+          "<strong>Already recorded.</strong> This student number has already submitted attendance.<span class='vb-quote'>Thank you for being punctual and committed.</span><a class='vb-link-btn' href='index.html'>Go Home</a>");
+        setSubmitting(false);
+        return;
+      }
+      throw insertError;
+    }
+
+    showAttendanceSuccess();
+
+    form.reset();
+    setSubmitting(false);
+
+  } catch (err) {
+    console.error(err);
+    showMessage("error", "Something went wrong while submitting. Please try again.");
+    setSubmitting(false);
+  }
+});
+</script>
+
+</body>
+</html>
+
+

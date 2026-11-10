@@ -1,0 +1,261 @@
+﻿:root {
+  --vb-black: #05070b;
+  --vb-panel: #0b1220;
+  --vb-panel-2: #101a2c;
+  --vb-blue: #2f80ff;
+  --vb-blue-soft: #77b7ff;
+  --vb-blue-pale: #d8eaff;
+  --vb-text: #f4f8ff;
+  --vb-muted: #aab8cc;
+  --vb-line: rgba(119, 183, 255, 0.24);
+  --vb-shadow: 0 22px 60px rgba(0, 0, 0, 0.34);
+}
+
+html { color-scheme: dark; }
+body {
+  background:
+    radial-gradient(900px 520px at 12% -8%, rgba(47, 128, 255, 0.22), transparent 62%),
+    radial-gradient(720px 420px at 92% 8%, rgba(119, 183, 255, 0.12), transparent 58%),
+    linear-gradient(145deg, #05070b 0%, #0b1220 54%, #06080d 100%) !important;
+  color: var(--vb-text) !important;
+}
+
+.site-header, header, .global-banner, footer {
+  border-color: var(--vb-line) !important;
+}
+
+.header-shell, .card, .vb-card, .wing, .modal-content, .main-content, .sidebar .card, .studytrust-tab, .bursary-item, .wishes-panel, .update-item, .ai-feature-card, .carousel-window {
+  background: linear-gradient(180deg, rgba(255,255,255,0.065), rgba(255,255,255,0.025)), rgba(11, 18, 32, 0.88) !important;
+  border-color: var(--vb-line) !important;
+  box-shadow: var(--vb-shadow) !important;
+}
+
+.brand-mark, .vb-badge {
+  background: linear-gradient(135deg, var(--vb-blue-soft), var(--vb-blue)) !important;
+  color: #031020 !important;
+  box-shadow: 0 12px 26px rgba(47, 128, 255, 0.28) !important;
+}
+
+.tabs {
+  background: rgba(216, 234, 255, 0.07) !important;
+  border-color: var(--vb-line) !important;
+}
+.tabs a { color: var(--vb-text) !important; }
+.tabs a.active, .tabs a:hover {
+  background: var(--vb-blue) !important;
+  color: white !important;
+}
+
+.hero-chip, .eyebrow, .ai-content h3, .wing-header h2, .modal-header h2, .highlight, label, .vb-fieldset legend, .vb-header p, .list-header, .studytrust-logo, .timer-display, .msg strong {
+  color: var(--vb-blue-soft) !important;
+}
+.hero-panel h2, h1, .main-title {
+  color: var(--vb-text) !important;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+}
+.hero-panel p, .subtitle, .announcement, .bursary-info p, .chat-header p, footer, .motto, .brand-subtitle {
+  color: var(--vb-muted) !important;
+}
+
+button, .ai-btn, .btn-home, .btn-primary, .btn-submit, .visit-btn, .vb-button, .vb-link-btn {
+  background: linear-gradient(135deg, var(--vb-blue), #69a9ff) !important;
+  color: white !important;
+  border-color: transparent !important;
+  box-shadow: 0 12px 28px rgba(47, 128, 255, 0.24) !important;
+}
+button:hover, .ai-btn:hover, .btn-home:hover, .btn-primary:hover, .btn-submit:hover, .visit-btn:hover, .vb-button:hover, .vb-link-btn:hover {
+  filter: brightness(1.06) !important;
+  transform: translateY(-1px);
+}
+button.secondary, .vb-button--ghost {
+  background: rgba(216, 234, 255, 0.08) !important;
+  color: var(--vb-blue-pale) !important;
+  border: 1px solid var(--vb-line) !important;
+}
+
+input, select, textarea, .chat-box, .chat-input-area {
+  background: rgba(5, 7, 11, 0.62) !important;
+  color: var(--vb-text) !important;
+  border-color: var(--vb-line) !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--vb-blue-soft) !important;
+  box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.18) !important;
+}
+
+.chat-header, .global-banner {
+  background: linear-gradient(135deg, rgba(47, 128, 255, 0.24), rgba(11, 18, 32, 0.92)) !important;
+  color: var(--vb-blue-pale) !important;
+}
+.msg.bot { background: rgba(255,255,255,0.055) !important; color: var(--vb-text) !important; }
+.msg.user { background: var(--vb-blue) !important; color: white !important; }
+.progress-fill, .status-dot { background: linear-gradient(90deg, var(--vb-blue), var(--vb-blue-soft)) !important; }
+.divider { background: linear-gradient(to right, transparent, var(--vb-blue), transparent) !important; }
+.ambient-sparkle { display: none !important; }
+
+@media (max-width: 760px) {
+  body { padding-left: 14px !important; padding-right: 14px !important; }
+  .header-shell, .card, .vb-card, .wing, .modal-content, .studytrust-tab { border-radius: 14px !important; }
+  .dashboard { grid-template-columns: 1fr !important; height: auto !important; overflow: visible !important; }
+}
+
+.page, .bg-elements {
+  background:
+    radial-gradient(900px 520px at 12% -8%, rgba(47, 128, 255, 0.20), transparent 62%),
+    radial-gradient(720px 420px at 92% 8%, rgba(119, 183, 255, 0.11), transparent 58%),
+    linear-gradient(145deg, #05070b 0%, #0b1220 56%, #06080d 100%) !important;
+}
+.bg-elements::before {
+  background: var(--vb-blue) !important;
+  opacity: 0.10 !important;
+}
+.bg-elements::after {
+  background: var(--vb-blue-soft) !important;
+  opacity: 0.08 !important;
+}
+.carousel-window {
+  border-color: var(--vb-line) !important;
+}
+.time-badge, .wing-status, .hero-chip {
+  background: rgba(47, 128, 255, 0.12) !important;
+  border-color: var(--vb-line) !important;
+}
+
+.vb-page-nav {
+  width: min(1060px, calc(100% - 28px));
+  margin: 14px auto;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  border: 1px solid var(--vb-line);
+  border-radius: 16px;
+  background: rgba(5, 7, 11, 0.72);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(14px);
+  position: relative;
+  z-index: 30;
+}
+
+.vb-page-nav a,
+.vb-page-nav button {
+  min-height: 40px;
+  padding: 9px 13px;
+  border-radius: 12px;
+  border: 1px solid var(--vb-line) !important;
+  background: rgba(216, 234, 255, 0.07) !important;
+  color: var(--vb-text) !important;
+  box-shadow: none !important;
+  text-decoration: none;
+  font: 700 13px/1 "Manrope", "Inter", "Segoe UI", sans-serif;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.vb-page-nav a:hover,
+.vb-page-nav button:hover,
+.vb-page-nav a[aria-current="page"] {
+  background: var(--vb-blue) !important;
+  color: white !important;
+}
+
+.vb-page-nav button::after {
+  display: none !important;
+}
+
+/* Responsive polish pass */
+img { max-width: 100%; }
+a, button { -webkit-tap-highlight-color: transparent; }
+.header-shell, .vb-card, .modal-content, .chat-shell, .studytrust-tab, .bursary-item, .quick-tile, .wing, .booking-card {
+  backdrop-filter: blur(14px);
+}
+
+.tabs a, .quick-tile, .hero-ai-card, .btn-primary, .btn-submit, .vb-button, .visit-btn, .btn-home, .home-link {
+  min-height: 44px;
+}
+
+.tabs a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-ai-card, .quick-tile {
+  border-color: var(--vb-line) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.028)), rgba(11,18,32,0.86) !important;
+}
+
+.quick-tile b, .carousel-caption strong, .hero-ai-copy strong {
+  color: var(--vb-text) !important;
+}
+.quick-tile span, .carousel-caption span, .hero-ai-copy span {
+  color: var(--vb-muted) !important;
+}
+
+.bursary-item, .booking-card, .update-item, .quick-tile {
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  .quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .dashboard { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+
+@media (max-width: 1050px) {
+  .tabs {
+    width: min(86vw, 360px) !important;
+    background: rgba(5, 7, 11, 0.97) !important;
+    border-left: 1px solid var(--vb-line) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html, body { width: 100%; overflow-x: hidden; }
+  body { padding: 0 !important; }
+  .vb-page-nav {
+    width: calc(100% - 24px);
+    margin: 12px auto;
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .vb-page-nav a,
+  .vb-page-nav button {
+    flex: 0 0 auto;
+  }
+  .site-header { padding: 12px !important; }
+  .header-shell { padding: 16px !important; border-radius: 18px !important; }
+  .topbar { align-items: center !important; }
+  .brand { min-width: 0; }
+  .brand h1 { font-size: 20px !important; }
+  .brand-subtitle { font-size: 12px; }
+  main { padding: 18px 12px 28px !important; gap: 18px !important; }
+  .hero-panel { padding: 26px 0 8px !important; }
+  .hero-panel h2 { font-size: 31px !important; line-height: 1.05 !important; }
+  .hero-ai-card { padding: 14px !important; border-radius: 16px !important; }
+  .carousel-window { border-radius: 16px !important; }
+  .carousel-caption { text-align: left; }
+  .carousel-caption strong { font-size: 24px; }
+  .quick-tile { min-height: 96px; border-radius: 15px; }
+  footer { padding: 28px 16px !important; }
+  .vb-wrap { min-height: auto !important; padding: 14px; }
+  .vb-card, .modal-content { width: 100% !important; }
+  .wing { padding: 18px !important; border-radius: 16px !important; }
+  .wing-header, .card-top, .success-ticket div { gap: 10px; flex-wrap: wrap; }
+  .global-banner { font-size: 12px !important; padding: 9px 12px !important; }
+  .page-content { padding: 0 12px 32px !important; }
+  .studytrust-tab, .bursary-item { border-radius: 14px !important; }
+}
+
+@media (max-width: 420px) {
+  .hero-ai-card { flex-direction: column; text-align: left; }
+  .hero-ai-copy { text-align: left !important; }
+  .menu-toggle { width: 48px !important; height: 48px !important; }
+  .carousel-window { min-height: 380px !important; }
+  .tabs { padding-left: 16px !important; padding-right: 16px !important; }
+}

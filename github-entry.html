@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Villa Bravado | Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --black: #0b0b0e;
+        --gold: #d4af37;
+        --gold-soft: #f6d978;
+        --ink: #f5f1e8;
+        --accent-teal: #37d4b3;
+        --accent-coral: #ff6f61;
+        --accent-sky: #57c7ff;
+        --accent-lime: #b5ff5a;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Manrope", "Segoe UI", sans-serif;
+        background: var(--black);
+        color: var(--ink);
+      }
+
+      body.menu-open { overflow: hidden; }
+
+      /* Sticky Footer Layout */
+      .page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 10% 10%, rgba(87, 199, 255, 0.35), transparent 45%),
+          radial-gradient(circle at 85% 15%, rgba(255, 111, 97, 0.4), transparent 40%),
+          radial-gradient(circle at 15% 80%, rgba(55, 212, 179, 0.35), transparent 45%),
+          radial-gradient(circle at 85% 85%, rgba(181, 255, 90, 0.2), transparent 50%),
+          linear-gradient(145deg, #09090c 20%, #15151b 80%);
+      }
+
+      .site-header {
+        padding: 28px clamp(16px, 4vw, 40px) 0;
+        position: relative;
+        z-index: 10;
+      }
+
+      .header-shell {
+        width: min(1180px, 100%);
+        margin: 0 auto;
+        padding: clamp(20px, 3vw, 32px);
+        border-radius: 34px;
+        background: linear-gradient(135deg, rgba(13, 18, 28, 0.95), rgba(28, 20, 41, 0.92));
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        backdrop-filter: blur(14px);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand { display: flex; align-items: center; gap: 14px; }
+      .brand-mark {
+        width: 46px; height: 46px; border-radius: 14px;
+        display: grid; place-items: center;
+        font-family: "Cinzel", serif; font-weight: 700; color: #111;
+        background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+      }
+      .brand h1 { font-family: "Cinzel", serif; font-size: clamp(20px, 3vw, 28px); margin: 0; }
+
+      /* NAVIGATION - Solution 1 implemented */
+      .tabs {
+        display: flex; gap: 10px; padding: 8px; border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(212, 175, 55, 0.28);
+        
+        /* New lines to allow smooth scrolling and prevent overlap */
+        max-width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none; /* Hides scrollbar in Firefox */
+        -ms-overflow-style: none; /* Hides scrollbar in IE/Edge */
+      }
+      
+      /* Hides scrollbar in Chrome/Safari/Edge */
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tabs a {
+        text-decoration: none; color: var(--ink); padding: 10px 18px;
+        border-radius: 999px; font-weight: 600; transition: 0.2s;
+        white-space: nowrap;
+      }
+      .tabs a.active { background: var(--gold); color: #111; }
+
+      .menu-toggle {
+        display: none; width: 54px; height: 54px; border-radius: 16px;
+        background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid var(--gold);
+        cursor: pointer; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+      }
+      .menu-toggle span { width: 22px; height: 2px; background: white; transition: 0.3s; }
+
+      /* Header Hero additions */
+      .hero-panel {
+        padding: 40px 0 20px;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .hero-chip {
+        background: rgba(212, 175, 55, 0.15);
+        color: var(--gold-soft);
+        padding: 6px 16px;
+        border-radius: 999px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+      }
+
+      .hero-panel h2 {
+        font-family: "Cinzel", serif;
+        font-size: clamp(28px, 5vw, 48px);
+        margin: 20px 0 15px;
+        background: linear-gradient(to right, #fff, var(--gold-soft));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+
+      .hero-ai-card {
+        margin: 26px auto 0;
+        max-width: 720px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 18px;
+        border-radius: 20px;
+        text-decoration: none;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.075);
+        border: 1px solid rgba(87, 199, 255, 0.36);
+        box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+      }
+
+      .hero-ai-icon {
+        width: 68px;
+        height: 68px;
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #77b7ff, #2f80ff);
+        font-size: 38px;
+      }
+
+      .hero-ai-copy { text-align: left; }
+      .hero-ai-copy strong { display: block; font-size: 20px; color: #f4f8ff; }
+      .hero-ai-copy span { display: block; margin-top: 4px; color: rgba(245, 241, 232, 0.72); font-size: 14px; }
+      /* MAIN CONTENT AREA */
+      main {
+        flex: 1;
+        width: min(1180px, 100%);
+        margin: 0 auto;
+        padding: 40px clamp(16px, 4vw, 32px);
+        display: grid;
+        gap: 36px;
+      }
+
+      /* AI CARD */
+      .ai-feature-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(212, 175, 55, 0.4);
+        border-radius: 24px; padding: 30px;
+        display: flex; align-items: center; gap: 20px;
+        backdrop-filter: blur(10px);
+      }
+      .ai-icon { font-size: 40px; }
+      .ai-content h3 { font-family: "Cinzel", serif; color: var(--gold-soft); margin: 0; }
+      .ai-btn {
+        background: var(--gold); color: #111; text-decoration: none;
+        padding: 12px 24px; border-radius: 999px; font-weight: 700;
+      }
+
+      /* CAROUSEL */
+      .study-carousel { display: grid; gap: 14px; }
+      .carousel-window {
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid var(--gold);
+        aspect-ratio: 16 / 8;
+        min-height: 260px;
+        max-height: 500px;
+        background: #07101d;
+      }
+      .carousel-track { height: 100%; display: flex; transition: 1s cubic-bezier(0.25, 1, 0.5, 1); }
+      .carousel-slide { flex: 0 0 100%; position: relative; min-width: 0; height: 100%; background: #07101d; }
+      .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .carousel-slide--portrait img { object-position: center 35%; }
+      .carousel-slide--wide img { object-position: center center; }
+      .carousel-caption {
+        position: absolute;
+        left: clamp(14px, 3vw, 28px);
+        right: clamp(14px, 3vw, 28px);
+        bottom: clamp(14px, 3vw, 26px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: white;
+        text-shadow: 0 2px 14px rgba(0,0,0,0.6);
+      }
+      .carousel-caption strong { font-size: clamp(18px, 3vw, 28px); }
+      .carousel-caption span {
+        max-width: 420px;
+        color: rgba(255,255,255,0.82);
+        font-size: 14px;
+      }
+      .carousel-dots { display: flex; justify-content: center; gap: 8px; }
+      .carousel-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        border: 0;
+        padding: 0;
+        background: rgba(255,255,255,0.32) !important;
+        box-shadow: none !important;
+      }
+      .carousel-dot.active { width: 24px; background: #77b7ff !important; }
+
+      .quick-links {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .quick-tile {
+        min-height: 112px;
+        padding: 18px;
+        border-radius: 18px;
+        text-decoration: none;
+        color: var(--ink);
+        border: 1px solid rgba(87, 199, 255, 0.24);
+        background: rgba(255,255,255,0.055);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+      .quick-tile:hover { transform: translateY(-3px); border-color: rgba(119,183,255,0.65); background: rgba(47,128,255,0.12); }
+      .quick-tile b { font-size: 16px; }
+      .quick-tile span { color: rgba(245,241,232,0.68); font-size: 13px; line-height: 1.35; }
+
+      .updates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .update-item { padding: 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); }
+
+      /* FOOTER - Locked to bottom */
+      footer {
+        padding: 40px 24px;
+        background: rgba(5, 5, 5, 0.9);
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
+        text-align: center;
+        margin-top: auto;
+      }
+
+      /* RESPONSIVE & LANDSCAPE */
+      @media (max-width: 1050px) {
+        .menu-toggle { display: flex; z-index: 100; }
+        .nav-overlay {
+          display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 90;
+        }
+        body.menu-open .nav-overlay { display: block; }
+        
+        .tabs {
+          position: fixed; top: 0; right: 0; height: 100vh; width: 320px;
+          flex-direction: column; border-radius: 0; padding: 100px 20px;
+          transform: translateX(100%); transition: 0.3s; z-index: 95;
+          justify-content: flex-start; overflow-y: auto; background: var(--black);
+        }
+        body.menu-open .tabs { transform: translateX(0); }
+        .tabs a { width: 100%; text-align: left; border-radius: 12px; }
+
+        @media (max-height: 500px) {
+            .tabs { padding: 60px 20px; gap: 4px; }
+            .tabs a { padding: 8px 15px; font-size: 14px; }
+        }
+      }
+
+      @media (max-width: 600px) {
+        .ai-feature-card { flex-direction: column; text-align: center; }
+        .ai-btn { width: 100%; }
+      }
+    </style>
+    <link rel="stylesheet" href="villa-theme.css">
+  </head>
+  <body>
+    <div class="page">
+      <header class="site-header">
+        <div class="header-shell">
+          <div class="topbar">
+            <div class="brand">
+              <div class="brand-mark">VB</div>
+              <div>
+                <h1>Villa Bravado</h1>
+                <div class="brand-subtitle">Student Links</div>
+              </div>
+            </div>
+
+            <button class="menu-toggle" aria-label="Toggle Menu">
+              <span></span><span></span><span></span>
+            </button>
+
+            <div class="nav-overlay"></div>
+
+            <nav class="tabs" id="site-menu">
+              <a href="index.html" onclick="if (history.length > 1) history.back(); else location.href='index.html'; return false;">Back</a>
+              <a class="active" href="index.html">Home</a>
+              <a href="assistant.html">AI Assistant</a>
+              <a href="attendance-intro.html">Attendance</a>
+              <a href="study_booking.html">Study Log Booking</a>
+              <a href="https://forms.gle/64HTHF4aWZQnJat1A" target="_blank" rel="noopener noreferrer">Maintenance</a>
+              <a href="https://exampapers.ufs.ac.za/Account/Login">Exam Papers</a>
+              <a href="bursary.html">Bursaries</a>
+            </nav>
+          </div>
+
+          <section class="header-hero">
+            <div class="hero-panel">
+              <span class="hero-chip">Villa Bravado students</span>
+              <h2>What do you need today?</h2>
+              <p>Use this page to book a study log, mark attendance, find bursary links, or ask for help with school work.</p>
+              <a class="hero-ai-card" href="assistant.html">
+                <div class="hero-ai-icon" aria-hidden="true">&#129409;</div>
+                <div class="hero-ai-copy">
+                  <strong>Ask Mr Roar</strong>
+                  <span>Send your notes or ask a question. Mr Roar will explain it in a way that makes sense.</span>
+                </div>
+              </a>
+            </div>
+          </section>
+        </div>
+      </header>
+
+      <main>
+        <section class="study-carousel" aria-label="Villa Bravado highlights">
+          <div class="carousel-window">
+            <div class="carousel-track">
+              <article class="carousel-slide carousel-slide--wide">
+                <img src="image2.jpg" alt="Villa Bravado community highlight">
+                <div class="carousel-caption"><strong>Around the Villa</strong><span>Photos, study links, and the things students use most often.</span></div>
+              </article>
+              <article class="carousel-slide carousel-slide--portrait">
+                <img src="image3.jpg" alt="Villa Bravado residence highlight">
+                <div class="carousel-caption"><strong>Find What You Need</strong><span>The main links are here whether you are on your phone or laptop.</span></div>
+              </article>
+              <article class="carousel-slide carousel-slide--wide">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" alt="Students focused together">
+                <div class="carousel-caption"><strong>Need a Study Space?</strong><span>Book Sechaba or Lufhuno and plan your session before you arrive.</span></div>
+              </article>
+              <article class="carousel-slide carousel-slide--wide">
+                <img src="https://media.licdn.com/dms/image/v2/D4D22AQGIC0cI-hsv6Q/feedshare-shrink_800/B4DZb0LtHjHEAg-/0/1747853436720?e=2147483647&v=beta&t=rdZiys5CMwxI2Je_s_bKTFdkzTg4tQv6EQFGyefvg2o" alt="Group study moment">
+                <div class="carousel-caption"><strong>House Links</strong><span>Attendance, bookings, bursaries, papers, and maintenance links are all close by.</span></div>
+              </article>
+            </div>
+          </div>
+          <div class="carousel-dots" aria-hidden="true"></div>
+        </section>
+
+        <section class="quick-links" aria-label="Quick links">
+          <a class="quick-tile" href="assistant.html"><b>Ask Mr Roar</b><span>Ask about notes, assignments, concepts, or study planning.</span></a>
+          <a class="quick-tile" href="study_booking.html"><b>Study Booking</b><span>Choose Sechaba or Lufhuno and book a time.</span></a>
+          <a class="quick-tile" href="attendance-intro.html"><b>Attendance</b><span>Mark your attendance for house meetings.</span></a>
+          <a class="quick-tile" href="bursary.html"><b>Bursaries</b><span>Find bursary names and the StudyTrust portal.</span></a>
+        </section>
+
+        <section class="updates">
+          <div class="update-item"><strong>House Update:</strong> Attendance opens 30 minutes before each meeting.</div>
+          <div class="update-item"><strong>Study Logs:</strong> Study log booking is open. Choose a time before the rooms fill up.</div>
+        </section>
+      </main>
+
+      <footer>
+        <span class="footer-brand">Villa Bravado Hub</span>
+        <p>© 2026 Villa Bravado Residence. All Rights Reserved.<br>
+           Built and maintained by <span style="color:var(--accent-sky); font-weight:700;">Francis Leo</span></p>
+      </footer>
+    </div>
+
+    <script>
+      const menuBtn = document.querySelector('.menu-toggle');
+      const overlay = document.querySelector('.nav-overlay');
+      
+      menuBtn.addEventListener('click', () => {
+        document.body.classList.toggle('menu-open');
+      });
+      
+      overlay.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+      });
+
+      const track = document.querySelector(".carousel-track");
+      const dotsWrap = document.querySelector(".carousel-dots");
+      if (track) {
+        const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+        let index = 0;
+        const dots = slides.map((_, dotIndex) => {
+          const dot = document.createElement("button");
+          dot.className = "carousel-dot";
+          dot.type = "button";
+          dot.addEventListener("click", () => showSlide(dotIndex));
+          dotsWrap.appendChild(dot);
+          return dot;
+        });
+
+        function showSlide(nextIndex) {
+          index = nextIndex % slides.length;
+          track.style.transform = `translateX(-${index * 100}%)`;
+          dots.forEach((dot, dotIndex) => dot.classList.toggle("active", dotIndex === index));
+        }
+
+        showSlide(0);
+        setInterval(() => showSlide(index + 1), 13000);
+      }
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+

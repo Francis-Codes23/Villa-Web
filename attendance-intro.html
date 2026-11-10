@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Continue to Attendance</title>
+  <style>
+    :root {
+      --blue-black: #020414;
+      --green: #14b85a;
+      --green-dark: #087a38;
+      --gold: #d8b853;
+      --white: #f8fbff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(48, 84, 210, 0.28), transparent 38%),
+        radial-gradient(circle at 12% 20%, rgba(216, 184, 83, 0.14), transparent 28%),
+        linear-gradient(145deg, #020414 0%, #050924 48%, #020414 100%);
+      color: var(--white);
+      display: flex;
+      justify-content: center;
+      padding: 82px 18px 28px;
+      overflow-x: hidden;
+    }
+
+    .continue-link {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translate(-50%, -16px);
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: white;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: clamp(14px, 2vw, 17px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      box-shadow: 0 12px 34px rgba(20, 184, 90, 0.48), 0 0 0 2px rgba(255, 255, 255, 0.24);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 300ms ease, transform 300ms ease, visibility 300ms ease;
+    }
+
+    .continue-link.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
+
+    .poster-stage {
+      width: min(100%, 780px);
+      min-height: calc(100vh - 110px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .poster-frame {
+      width: 100%;
+      padding: clamp(8px, 2vw, 16px);
+      border: 2px solid rgba(216, 184, 83, 0.86);
+      border-radius: 22px;
+      background: rgba(2, 4, 20, 0.88);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.62), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    }
+
+    .poster-frame img {
+      display: block;
+      width: 100%;
+      max-height: calc(100vh - 136px);
+      object-fit: contain;
+      border-radius: 14px;
+      background: var(--blue-black);
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 74px 8px 12px; }
+      .continue-link { width: calc(100% - 28px); }
+      .poster-frame { border-radius: 16px; }
+      .poster-frame img { border-radius: 10px; max-height: calc(100vh - 120px); }
+    }
+  </style>
+</head>
+<body>
+  <a class="continue-link" id="continueLink" href="house.html">Continue to Attendance</a>
+
+  <main class="poster-stage" aria-label="Annual Prestige invitation">
+    <figure class="poster-frame">
+      <img src="IMG-20260618-WA0007.jpg" alt="Annual Prestige event poster" />
+    </figure>
+  </main>
+
+  <script>
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("continueLink").classList.add("is-visible");
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

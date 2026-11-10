@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Villa Bravado | Study Booking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@300;500;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <style>
+    :root {
+      --black: #0b0b0e;
+      --black-deep: #060608;
+      --gold: #d4af37;
+      --gold-soft: #f6d978;
+      --ink: #f5f1e8;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-hover: rgba(255, 255, 255, 0.08);
+      --border: rgba(212, 175, 55, 0.35);
+      --shadow: rgba(212, 175, 55, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--black);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Background */
+    .bg-elements {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(246, 217, 120, 0.12), transparent 45%),
+        radial-gradient(circle at 85% 15%, rgba(212, 175, 55, 0.15), transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(246, 217, 120, 0.1), transparent 45%),
+        linear-gradient(145deg, #08080b 20%, #111116 80%);
+    }
+
+    .bg-elements::before,
+    .bg-elements::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      opacity: 0.15;
+      filter: blur(60px);
+    }
+
+    .bg-elements::before {
+      width: 400px;
+      height: 400px;
+      background: var(--gold);
+      top: -100px;
+      right: -100px;
+    }
+
+    .bg-elements::after {
+      width: 300px;
+      height: 300px;
+      background: var(--gold-soft);
+      bottom: -100px;
+      left: -100px;
+    }
+
+    /* Global Banner */
+    .global-banner {
+      background: rgba(212, 175, 55, 0.15);
+      border-bottom: 1px solid var(--border);
+      color: var(--gold-soft);
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Layout structure */
+    .page-content {
+      position: relative;
+      z-index: 1;
+      padding: 0 clamp(20px, 5vw, 80px) 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Header & Hero */
+    header {
+      padding: 40px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 13px;
+      color: var(--gold-soft);
+      font-weight: 700;
+    }
+
+    .focus-toggle {
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--ink);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .focus-toggle:hover {
+      background: var(--glass-hover);
+      border-color: var(--border);
+    }
+
+    .focus-toggle.active {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+      color: var(--gold-soft);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    h1 {
+      font-family: "Cinzel", serif;
+      font-size: clamp(36px, 6vw, 64px);
+      margin: 0 0 16px;
+      line-height: 1.1;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .subtitle {
+      color: rgba(245, 241, 232, 0.7);
+      max-width: 600px;
+      margin: 0 auto 32px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .btn-primary {
+      padding: 16px 32px;
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+      color: #111;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(212, 175, 55, 0.4);
+      filter: brightness(1.05);
+    }
+
+    /* Digital Dashboard */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 850px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .wing {
+      background: rgba(10, 10, 14, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .wing-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .wing-header h2 {
+      font-family: "Cinzel", serif;
+      color: var(--gold-soft);
+      font-size: 24px;
+    }
+
+    .wing-status {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: var(--glass);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .booking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Cards */
+    .booking-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      transition: transform 0.2s ease;
+    }
+
+    .booking-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .booking-card.active {
+      border-color: var(--border);
+      background: linear-gradient(145deg, rgba(212,175,55,0.08), rgba(0,0,0,0));
+      box-shadow: inset 0 0 20px rgba(212,175,55,0.05);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .student-info h3 {
+      font-family: "Cinzel", serif;
+      font-size: 18px;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .student-info p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .time-badge {
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gold-soft);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      margin-top: 16px;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+      width: 0%; /* updated via JS */
+      border-radius: 999px;
+      transition: width 1s linear;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255, 255, 255, 0.4);
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    /* Modals */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 6, 8, 0.85);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: #0b0b0f;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.show .modal-content {
+      transform: translateY(0);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .close-modal:hover {
+      color: var(--ink);
+    }
+
+    .modal-header {
+      margin-bottom: 24px;
+    }
+
+    .modal-header h2 {
+      font-family: "Cinzel", serif;
+      color: var(--gold-soft);
+      font-size: 28px;
+    }
+
+    .modal-header p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 8px;
+    }
+
+    /* Form Styles */
+    form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--ink);
+      font-size: 15px;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+
+    /* Custom styles for select options to ensure readability */
+    select option {
+      background: var(--black-deep);
+      color: var(--ink);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-soft));
+      color: #111;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #formMessage {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gold-soft);
+      text-align: center;
+      min-height: 20px;
+      margin-top: 12px;
+    }
+
+    /* Success Modal Details */
+    .success-ticket {
+      background: rgba(212, 175, 55, 0.05);
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .success-ticket div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .success-ticket div:last-child {
+      margin-bottom: 0;
+    }
+
+    .success-ticket span { color: rgba(255,255,255,0.6); }
+    .success-ticket strong { color: var(--gold-soft); font-family: "Cinzel", serif; }
+
+  </style>
+    <link rel="stylesheet" href="villa-theme.css">
+</head>
+<body>
+  <nav class="vb-page-nav" aria-label="Page navigation">
+    <a href="index.html">Back to Home</a>
+  </nav>
+
+  <div class="bg-elements"></div>
+
+  <div class="global-banner">
+    ?? Notice: Bookings made on Wednesdays and Thursdays between 21:00 and 23:00 are unavailable due to Corridor Study Day.
+  </div>
+
+  <div class="page-content">
+    <header>
+      <div class="header-top">
+        <div class="eyebrow">Villa Bravado</div>
+        <button class="focus-toggle" id="lofiToggle">
+          ?? Ambient Focus
+        </button>
+      </div>
+      
+      <h1>Study Log Booking</h1>
+      <p class="subtitle">Choose a log, pick a time, and make sure your booking does not clash with someone else.</p>
+      
+      <button class="btn-primary" id="btnOpenBooking">Book a Slot</button>
+    </header>
+
+    <main class="dashboard">
+      <section class="wing" id="wing-sechaba">
+        <div class="wing-header">
+          <h2>Sechaba</h2>
+          <span class="wing-status" id="status-sechaba">Checking...</span>
+        </div>
+        <div class="booking-list" id="list-sechaba">
+          </div>
+      </section>
+
+      <section class="wing" id="wing-lufhuno">
+        <div class="wing-header">
+          <h2>Lufhuno</h2>
+          <span class="wing-status" id="status-lufhuno">Checking...</span>
+        </div>
+        <div class="booking-list" id="list-lufhuno">
+          </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="bookingModal">
+    <div class="modal-content">
+      <button class="close-modal" id="closeBookingBtn">&times;</button>
+      
+      <div class="modal-header">
+        <h2>Book a Log</h2>
+        <p>You may book up to two hours under one name. Advance booking required (min. 1 day).</p>
+      </div>
+
+      <form id="bookingForm">
+        <div class="field">
+          <label>Select Log</label>
+          <select name="log_name" required>
+            <option value="">-- Choose Venue --</option>
+            <option value="Sechaba">Sechaba</option>
+            <option value="Lufhuno">Lufhuno</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" name="full_name" placeholder="e.g. John Doe" required />
+        </div>
+
+        <div class="field">
+          <label>Student Number</label>
+          <input type="text" name="student_number" placeholder="Enter strictly digits" required />
+        </div>
+
+        <div class="field">
+          <label>Start Time</label>
+          <input type="datetime-local" name="study_start" required />
+        </div>
+
+        <div class="field">
+          <label>Duration</label>
+          <select name="duration" required>
+            <option value="1">1 Hour</option>
+            <option value="2" selected>2 Hours (Max)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit">Confirm Booking</button>
+      </form>
+      <div id="formMessage"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="successModal">
+    <div class="modal-content" style="text-align: center;">
+      <div class="modal-header">
+        <h2>Booking Confirmed</h2>
+        <p>Your study-log booking has been saved.</p>
+      </div>
+      
+      <div class="success-ticket">
+        <div><span>Log</span><strong id="detailLog"></strong></div>
+        <div><span>Name</span><strong id="detailName"></strong></div>
+        <div><span>Student #</span><strong id="detailStudent"></strong></div>
+        <div><span>Start Time</span><strong id="detailStart"></strong></div>
+      </div>
+      
+      <button class="btn-submit" id="closeSuccessBtn">Return to Dashboard</button>
+    </div>
+  </div>
+
+  <div class="modal" id="alertModal">
+    <div class="modal-content" style="max-width: 350px; text-align: center; padding: 24px;">
+      <p id="alertMessageText" style="font-size: 16px; margin-bottom: 20px; color: #f5f1e8; font-weight: 500;"></p>
+      <button class="btn-submit" id="closeAlertBtn" style="padding: 10px; font-size: 14px;">OK</button>
+    </div>
+  </div>
+
+  <audio id="ambientAudio" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // =========================
+    // 1. CONNECT TO SUPABASE (UNTOUCHED)
+    // =========================
+    const supabaseUrl = "https://hldtrofwejpxixtbrthz.supabase.co";
+    const supabaseKey =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhsZHRyb2Z3ZWpweGl4dGJydGh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1OTUxMTQsImV4cCI6MjA4OTE3MTExNH0.N5DsYTVezE_DL5fBGdobyIdTlauklJgB7UeTsNybDv8"; 
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // =========================
+    // 2. UI & MODAL MANAGEMENT
+    // =========================
+    const btnOpenBooking = document.getElementById("btnOpenBooking");
+    const bookingModal = document.getElementById("bookingModal");
+    const closeBookingBtn = document.getElementById("closeBookingBtn");
+    
+    const successModal = document.getElementById("successModal");
+    const closeSuccessBtn = document.getElementById("closeSuccessBtn");
+
+    const alertModal = document.getElementById("alertModal");
+    const closeAlertBtn = document.getElementById("closeAlertBtn");
+    const alertMessageText = document.getElementById("alertMessageText");
+
+    function openBooking() { bookingModal.classList.add("show"); }
+    function closeBooking() { 
+      bookingModal.classList.remove("show"); 
+      document.getElementById("formMessage").textContent = "";
+    }
+    
+    function showCustomAlert(msg) {
+      alertMessageText.textContent = msg;
+      alertModal.classList.add("show");
+    }
+
+    btnOpenBooking.addEventListener("click", openBooking);
+    closeBookingBtn.addEventListener("click", closeBooking);
+    
+    closeSuccessBtn.addEventListener("click", () => {
+      successModal.classList.remove("show");
+    });
+
+    closeAlertBtn.addEventListener("click", () => {
+      alertModal.classList.remove("show");
+    });
+
+    // Close modals on outside click
+    window.addEventListener("click", (e) => {
+      if (e.target === bookingModal) closeBooking();
+      if (e.target === successModal) successModal.classList.remove("show");
+      if (e.target === alertModal) alertModal.classList.remove("show");
+    });
+
+    // =========================
+    // 3. AMBIENT AUDIO TOGGLE
+    // =========================
+    const lofiToggle = document.getElementById("lofiToggle");
+    const ambientAudio = document.getElementById("ambientAudio");
+    ambientAudio.volume = 0.25; // Keep it low and premium
+
+    lofiToggle.addEventListener("click", () => {
+      if (ambientAudio.paused) {
+        ambientAudio.play().catch(e => console.log("Audio play prevented:", e));
+        lofiToggle.classList.add("active");
+        lofiToggle.innerHTML = "? Ambient Focus On";
+      } else {
+        ambientAudio.pause();
+        lofiToggle.classList.remove("active");
+        lofiToggle.innerHTML = "?? Ambient Focus";
+      }
+    });
+
+    // =========================
+    // 4. DATA RENDERING & DASHBOARD
+    // =========================
+    function formatTimeStr(dateObj) {
+      return dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function createCardHTML(b) {
+      const start = new Date(b.study_start);
+      const end = new Date(b.study_end);
+      const now = new Date();
+      
+      const isActive = now >= start && now < end;
+      const timeString = `${formatTimeStr(start)} ? ${formatTimeStr(end)}`;
+      const dateString = start.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+
+      let progressHTML = '';
+      if (isActive) {
+        // Calculate progress percentage
+        const totalDuration = end.getTime() - start.getTime();
+        const elapsed = now.getTime() - start.getTime();
+        const percentage = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
+        
+        progressHTML = `
+          <div class="progress-container">
+            <div class="progress-text">
+              <span>Session in progress</span>
+              <span>Ends at ${formatTimeStr(end)}</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: ${percentage}%;"></div>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="booking-card ${isActive ? 'active' : ''}">
+          <div class="card-top">
+            <div class="student-info">
+              <h3>${b.full_name}</h3>
+              <p>ID: ${b.student_number}</p>
+            </div>
+            <div class="time-badge">${isActive ? 'LIVE NOW' : dateString}</div>
+          </div>
+          <div style="font-size: 13px; color: var(--gold-soft); margin-top: 8px;">
+            ? ${timeString}
+          </div>
+          ${progressHTML}
+        </div>
+      `;
+    }
+
+    function renderWing(logName, bookings) {
+      const listEl = document.getElementById(`list-${logName.toLowerCase()}`);
+      const statusEl = document.getElementById(`status-${logName.toLowerCase()}`);
+      
+      const wingBookings = bookings.filter(b => b.log_name === logName);
+      
+      // Sort by start time
+      wingBookings.sort((a, b) => new Date(a.study_start) - new Date(b.study_start));
+
+      if (wingBookings.length === 0) {
+        listEl.innerHTML = `<div class="empty-state">No one has booked this log yet.</div>`;
+        statusEl.textContent = "Available";
+        statusEl.style.color = "#a8f0c6"; // Soft green
+        return;
+      }
+
+      const now = new Date();
+      const activeSession = wingBookings.find(b => {
+        const start = new Date(b.study_start);
+        const end = new Date(b.study_end);
+        return now >= start && now < end;
+      });
+
+      if (activeSession) {
+        statusEl.textContent = "Currently Occupied";
+        statusEl.style.color = "var(--gold-soft)";
+      } else {
+        statusEl.textContent = "Available Now";
+        statusEl.style.color = "#a8f0c6";
+      }
+
+      listEl.innerHTML = wingBookings.map(b => createCardHTML(b)).join('');
+    }
+
+    function renderDashboard(bookings) {
+      renderWing("Sechaba", bookings);
+      renderWing("Lufhuno", bookings);
+    }
+
+    let globalBookingsData = [];
+
+    async function loadBookings() {
+      const { data, error } = await supabaseClient
+        .from("study_bookings")
+        .select("*")
+        .gt("study_end", new Date().toISOString())
+        .order("study_start", { ascending: true });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      globalBookingsData = data;
+      renderDashboard(globalBookingsData);
+    }
+
+    // Auto-update UI progress bars every 30 seconds
+    setInterval(() => {
+      if (globalBookingsData.length > 0) {
+        renderDashboard(globalBookingsData);
+      }
+    }, 30000);
+
+    function subscribeToBookings() {
+      supabaseClient
+        .channel("study-bookings-live")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "study_bookings" },
+          () => {
+            loadBookings();
+          }
+        )
+        .subscribe();
+    }
+
+    // =========================
+    // 5. FORM SUBMISSION LOGIC (UNTOUCHED LOGIC)
+    // =========================
+    const form = document.getElementById("bookingForm");
+    const studyStartInput = document.querySelector('input[name="study_start"]');
+    const message = document.getElementById("formMessage");
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    // UNTOUCHED: Set minimum selectable time to TOMORROW
+    function updateMinTime() {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0); // Sets the time to midnight of the next day
+      tomorrow.setMinutes(tomorrow.getMinutes() - tomorrow.getTimezoneOffset());
+      studyStartInput.min = tomorrow.toISOString().slice(0, 16);
+    }
+
+    updateMinTime();
+    setInterval(updateMinTime, 60000);
+
+    let isSubmitting = false;
+    let lastSubmissionKey = "";
+    let lastSubmissionAt = 0;
+    const DUPLICATE_WINDOW_MS = 6000;
+
+    function setSubmitting(state) {
+      isSubmitting = state;
+      submitBtn.disabled = state;
+      submitBtn.textContent = state ? "Processing..." : "Confirm Booking";
+    }
+
+    function showSuccess(details) {
+      document.getElementById("detailLog").textContent = details.log_name;
+      document.getElementById("detailName").textContent = details.full_name;
+      document.getElementById("detailStudent").textContent = details.student_number;
+      
+      const startObj = new Date(details.study_start);
+      document.getElementById("detailStart").textContent = startObj.toLocaleString([], {
+        weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+      
+      closeBooking();
+      successModal.classList.add("show");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (isSubmitting) return;
+
+      let submissionSucceeded = false;
+      setSubmitting(true);
+      message.textContent = "";
+
+      try {
+        const log_name = form.log_name.value.trim();
+        const full_name = form.full_name.value.trim();
+        const rawStudent = form.student_number.value.trim();
+        const student_number = rawStudent.replace(/\s+/g, "");
+        const startValue = form.study_start.value;
+        const duration = parseInt(form.duration.value, 10);
+
+        if (!log_name || !full_name || !startValue) {
+          message.textContent = "? Please fill in all fields.";
+          setSubmitting(false);
+          return;
+        }
+
+        if (!/^\d+$/.test(student_number)) {
+          message.textContent = "? Student number must contain digits only.";
+          setSubmitting(false);
+          return;
+        }
+
+        const start = new Date(startValue);
+        if (Number.isNaN(start.getTime())) {
+          message.textContent = "? Please select a valid start time.";
+          setSubmitting(false);
+          return;
+        }
+
+        // UNTOUCHED: 1 Day validation logic
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0); 
+        if (start < tomorrow) {
+          message.textContent = "? Bookings must be made at least one day in advance.";
+          setSubmitting(false);
+          return;
+        }
+
+        const submissionKey = [log_name, full_name.toLowerCase(), student_number, startValue].join("|");
+        const nowTs = Date.now();
+        if (submissionKey === lastSubmissionKey && nowTs - lastSubmissionAt < DUPLICATE_WINDOW_MS) {
+          message.textContent = "? Please wait a moment before submitting again.";
+          setSubmitting(false);
+          return;
+        }
+        lastSubmissionKey = submissionKey;
+        lastSubmissionAt = nowTs;
+
+        const dayStart = new Date(start);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(start);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        // 1. CHECK IF STUDENT ALREADY BOOKED FOR THE DAY
+        const { data: existingBooking, error: checkError } = await supabaseClient
+          .from("study_bookings")
+          .select("id")
+          .eq("student_number", student_number)
+          .gte("study_start", dayStart.toISOString())
+          .lte("study_start", dayEnd.toISOString());
+
+        if (checkError) throw checkError;
+
+        if (existingBooking && existingBooking.length > 0) {
+          message.textContent = "? You already have a booking for this day.";
+          setSubmitting(false);
+          return;
+        }
+
+        // 2. CALCULATE END TIME
+        const end = new Date(start);
+        end.setHours(end.getHours() + duration);
+
+        const dataToInsert = {
+          log_name,
+          full_name,
+          student_number,
+          study_start: start.toISOString(),
+          study_end: end.toISOString(),
+        };
+
+        // 3. CHECK FOR TIME CLASHES
+        const { data: clashes, error: clashError } = await supabaseClient
+          .from("study_bookings")
+          .select("id")
+          .eq("log_name", log_name)
+          .lt("study_start", dataToInsert.study_end)
+          .gt("study_end", dataToInsert.study_start);
+
+        if (clashError) throw clashError;
+
+       if (clashes && clashes.length > 0) {
+         showCustomAlert("Aweh villamanne ?? That slot is already taken. Try another one.");
+         setSubmitting(false);
+         return;
+       }
+
+        // 4. INSERT INTO SUPABASE
+        const { error } = await supabaseClient.from("study_bookings").insert([dataToInsert]);
+        if (error) throw error;
+
+        submissionSucceeded = true;
+
+        // 5. SUCCESS UI
+        showSuccess({
+          log_name,
+          full_name,
+          student_number,
+          study_start: startValue,
+        });
+        form.reset();
+
+      } catch (err) {
+        console.error(err);
+        message.textContent = "? Something went wrong. Please try again.";
+      } finally {
+        if (!submissionSucceeded) {
+          lastSubmissionKey = "";
+          lastSubmissionAt = 0;
+        }
+        setSubmitting(false);
+      }
+    });
+
+    // INITIALIZE
+    loadBookings();
+    subscribeToBookings();
+  </script>
+</body>
+</html>
+
+
+
+
+
+

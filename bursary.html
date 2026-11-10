@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bursaries | Villa Bravado</title>
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.8);
+            --primary: #1a2a6c;
+            --accent: #b21f1f;
+            --gold: #fdbb2d;
+            --text: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-attachment: fixed;
+            margin: 0;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Title Styling */
+        .main-title {
+            color: white;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Main StudyTrust Tab */
+        .studytrust-tab {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .studytrust-tab:active {
+            transform: scale(0.98);
+        }
+
+        .studytrust-logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .visit-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(26, 42, 108, 0.4);
+        }
+
+        /* List Styling */
+        .list-header {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .bursary-item {
+            background: rgba(255, 255, 255, 0.95);
+            margin-bottom: 12px;
+            padding: 18px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .bursary-item:hover {
+            transform: translateX(5px);
+            background: white;
+        }
+
+        .bursary-info h3 {
+            margin: 0;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .bursary-info p {
+            margin: 4px 0 0 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .status-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #27ae60;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .arrow-icon {
+            color: #ccc;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Responsive active state for mobile */
+        .bursary-item:active {
+            background: #f0f0f0;
+        }
+
+    </style>
+    <link rel="stylesheet" href="villa-theme.css">
+</head>
+<body>
+    <nav class="vb-page-nav" aria-label="Page navigation">
+        <a href="index.html">Back to Home</a>
+    </nav>
+
+    <div class="container">
+        
+        <h1 class="main-title">Central Managed Bursaries</h1>
+
+        <div class="studytrust-tab">
+            <span class="studytrust-logo">StudyTrust</span>
+            <p style="font-size: 14px; color: #444; margin-bottom: 20px;">
+                Connecting potential to opportunity since 1974.
+            </p>
+            <a href="https://studytrust.org.za/" target="_blank" class="visit-btn">Visit Official Portal</a>
+        </div>
+
+        <div class="list-header">Managed by StudyTrust</div>
+
+        <div class="bursary-item">
+            <div class="bursary-info">
+                <h3>AIG South Africa Bursary</h3>
+                <p><span class="status-dot"></span>Commerce & Risk Management</p>
+            </div>
+            <span class="arrow-icon">›</span>
+        </div>
+
+        <div class="bursary-item">
+            <div class="bursary-info">
+                <h3>Capitec Bank Bursary</h3>
+                <p><span class="status-dot"></span>IT, Data Science & Maths</p>
+            </div>
+            <span class="arrow-icon">›</span>
+        </div>
+
+        <div class="bursary-item">
+            <div class="bursary-info">
+                <h3>Pick n Pay Bursary</h3>
+                <p><span class="status-dot"></span>Pharmacy & Retail Management</p>
+            </div>
+            <span class="arrow-icon">›</span>
+        </div>
+
+        <div class="bursary-item">
+            <div class="bursary-info">
+                <h3>Standard Bank (1st Year)</h3>
+                <p><span class="status-dot"></span>Various Fields</p>
+            </div>
+            <span class="arrow-icon">›</span>
+        </div>
+
+        <div class="bursary-item">
+            <div class="bursary-info">
+                <h3>Toyota SA Bursary</h3>
+                <p><span class="status-dot" style="background:#e74c3c;"></span>Engineering & Commerce</p>
+            </div>
+            <span class="arrow-icon">›</span>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+
